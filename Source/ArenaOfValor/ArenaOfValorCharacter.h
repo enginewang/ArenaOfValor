@@ -52,6 +52,7 @@ protected:
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 
+	UFUNCTION(BlueprintCallable, Category="Custom")
 	void BackHome();
 
 protected:
@@ -65,20 +66,26 @@ public:
 	/** Returns FollowCamera subobject **/
 	//FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	virtual void Tick(float DeltaTime) override;
+
 	// ÑªÌõbar
 	//UPROPERTY(EditAnywhere, Category = "WidgetComponent")
 	//	class UWidgetComponent* WidgetComponent;
 
 	// ×ÜÑªÁ¿
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Health")
-		int32 TotalHealth;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Costom")
+		int32 MaxHealth;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, Category = "Health")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, Category = "Costom")
 		int32 CurHealth;
 
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Transient, Category = "Health")
-		float HealthProportion;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Costom")
+		int32 MaxMana;
 
-	virtual void PostInitProperties() override;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, Category = "Costom")
+		int32 CurMana;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Costom")
+		FVector CurPosition;
 };
 

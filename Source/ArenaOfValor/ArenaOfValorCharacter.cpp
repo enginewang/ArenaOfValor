@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Engine/Engine.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AArenaOfValorCharacter
@@ -51,14 +52,9 @@ AArenaOfValorCharacter::AArenaOfValorCharacter()
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 
-	TotalHealth = 1000;
-	CurHealth = TotalHealth;
+	MaxHealth = 100000;
+	CurHealth = MaxHealth;
 	
-}
-
-void AArenaOfValorCharacter::PostInitProperties() {
-	Super::PostInitProperties();
-	HealthProportion = CurHealth / TotalHealth;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -157,4 +153,26 @@ void AArenaOfValorCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void AArenaOfValorCharacter::Tick(float DeltaTime) {
+	Super::Tick(DeltaTime);
+	CurPosition = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+	
+	/*
+		if (CurPosition.Y > 1000 || CurPosition.Y < -1000) {
+		CurHealth -= 200;
+		}
+
+	if (CurHealth < MaxHealth) {
+		CurHealth += 1;
+	}
+
+	if (GEngine) {
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString::Printf(TEXT("HP: %d / %d, perHP: %f"), CurHealth, MaxHealth, CurHealth/MaxHealth));
+	}
+	
+	*/
+
+
 }

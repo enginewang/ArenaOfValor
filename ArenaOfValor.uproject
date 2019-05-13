@@ -28,6 +28,10 @@
 			"Name": "UE4EditorCustomize",
 			"Enabled": true,
 			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/0d22d9af59624886a6fccd9573fefa90"
+		},
+		{
+			"Name": "CLionSourceCodeAccess",
+			"Enabled": false
 		}
 	]
 }

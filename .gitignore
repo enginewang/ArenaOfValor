@@ -6,7 +6,16 @@ Content/KiteDemo
 Content/Lighting
 Content/Mannequin
 Content/ModularRPGHeroesPolyart
-Content/ParagonGreystone
+Content/ParagonGreystone/Audio
+Content/ParagonGreystone/FX
+Content/ParagonGreystone/Characters/Global
+Content/ParagonGreystone/Characters/Maps
+Content/ParagonGreystone/Characters/Heros/Greystone/Materials
+Content/ParagonGreystone/Characters/Heros/Greystone/Animations
+Content/ParagonGreystone/Characters/Heros/Greystone/Meshes
+Content/ParagonGreystone/Characters/Heros/Greystone/Skins
+Content/ParagonGreystone/Characters/Heros/Greystone/Textures
+Content/ParagonGreystone/Characters/Heros/Greystone/AnimationTestMap.umap
 Content/ParagonMinions
 Content/ParagonProps
 Content/ParagonSparrow

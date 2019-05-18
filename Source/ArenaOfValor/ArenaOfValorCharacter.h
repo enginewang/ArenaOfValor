@@ -72,7 +72,7 @@ public:
 	//UPROPERTY(EditAnywhere, Category = "WidgetComponent")
 	//	class UWidgetComponent* WidgetComponent;
 
-	// ×ÜÑªÁ¿
+	/*
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Costom")
 		int32 MaxHealth;
 
@@ -84,6 +84,8 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, Category = "Costom")
 		int32 CurMana;
+
+	*/
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Costom")
 		FVector CurPosition;

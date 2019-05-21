@@ -4,6 +4,7 @@
 #include "Components/TextRenderComponent.h"
 #include "ArenaOfValor.h"
 #include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ACountdown::ACountdown()
@@ -58,4 +59,9 @@ void ACountdown::CountdownFinished_Implementation() {
 
 void ACountdown::StopCountdown_Implementation() {
 	CountdownText->SetText(FText::FromString(FString::FromInt(OriginCountdownTime)));
+}
+
+float ACountdown::ReturnTotalSecond() {
+	float realTimeSecond = UGameplayStatics::GetRealTimeSeconds(GetWorld());
+	return realTimeSecond;
 }

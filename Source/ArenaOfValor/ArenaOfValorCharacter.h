@@ -4,88 +4,84 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Components/TimelineComponent.h"
+#include "Components/ProgressBar.h"
 #include "ArenaOfValorCharacter.generated.h"
+
+
+#define DEFAULT_RADIUS 100
+#define RED_SIDE 0
+#define BLUE_SIDE 1
+#define UNDEFINED_SIDE 2
+#define SMAP_RED_HOME_X 5000
+
+
+class UInputComponent;
+class USphereComponent;
 
 UCLASS(config=Game)
 class AArenaOfValorCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-	/*
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* FollowCamera;
-	 */
+	UPROPERTY(VisibleDefaultsOnly, Category = "Custom")
+	class USkeletalMeshComponent* CharacterMesh;
 	
 public:
 	AArenaOfValorCharacter();
 
-	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	//float BaseTurnRate;
-
-	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	//float BaseLookUpRate;
-
 protected:
 
-	/** Resets HMD orientation in VR. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Custom")
+		USphereComponent* SphereComp;
+
 	void OnResetVR();
 
-	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
-	/** Called for side to side input */
 	void MoveRight(float Value);
 
-	
-	//void TurnAtRate(float Rate);
-
-	//void LookUpAtRate(float Rate);
-
-	/** Handler for when a touch input begins. */
 	void TouchStarted(ETouchIndex::Type FingerIndex, FVector Location);
 
-	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
 
-	UFUNCTION(BlueprintCallable, Category="Custom")
-	void BackHome();
 
 protected:
-	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	// End of APawn interface
 
 public:
-	/** Returns CameraBoom subobject **/
-	//FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/** Returns FollowCamera subobject **/
-	//FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-
 	virtual void Tick(float DeltaTime) override;
 
-	// 血条bar
-	//UPROPERTY(EditAnywhere, Category = "WidgetComponent")
-	//	class UWidgetComponent* WidgetComponent;
+	// 红方为0，蓝方为1
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom")
+		int MySide;
 
-	// 总血量
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Costom")
-		int32 MaxHealth;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom")
+		float AttackRadius;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, Category = "Costom")
-		int32 CurHealth;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Costom")
-		int32 MaxMana;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, Category = "Costom")
-		int32 CurMana;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Costom")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom")
 		FVector CurPosition;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom")
+		float MaxHealth;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, Category = "Custom")
+		float CurHealth;
+
+	UFUNCTION(BlueprintCallable)
+		FText setHealthMessage();
+
+	//UFUNCTION(BlueprintCallable)
+		//virtual void FindEnemies();
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom")
+		UProgressBar* FloatHealthBar;
+
+
+	// 攻击范围内的Actor列表
+	//TArray<AActor*> ActorsInRadius;
+
+	// 可以遭受攻击伤害的敌人列表
+	//TSet<AArenaOfValorCharacter*> TargetedActors;
 };
 

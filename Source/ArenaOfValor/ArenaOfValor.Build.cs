@@ -8,6 +8,6 @@ public class ArenaOfValor : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "RHI", "UMG", "Slate", "SlateCore", "AIModule", "RenderCore", "HeadMountedDisplay" });
 	}
 }

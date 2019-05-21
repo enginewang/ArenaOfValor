@@ -38,4 +38,5 @@ public:
 	void StopCountdown();
 	virtual void StopCountdown_Implementation();
 	void DeleteCountdown();
+	float ReturnTotalSecond();
 };

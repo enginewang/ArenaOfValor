@@ -11,31 +11,33 @@
 UCLASS()
 class ARENAOFVALOR_API ACountdown : public AActor
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+    
 public:
-	// Sets default values for this actor's properties
-	ACountdown();
-
+    // Sets default values for this actor's properties
+    ACountdown();
+    
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	virtual void Tick(float DeltaSeconds) override;
-	// ÔËÐÐÊ±³¤£¬ÒÔÃë¼Æ
-	UPROPERTY(EditAnywhere)
-	int32 CountdownTime;
-	UTextRenderComponent* CountdownText;
-	int32 OriginCountdownTime;
-	void UpdateTimerDisplay();
-	void AdvanceTimer();
-	UFUNCTION(BlueprintNativeEvent)
-	void CountdownFinished();
-	virtual void CountdownFinished_Implementation();
-	FTimerHandle CountdownTimerHandle;
-	UFUNCTION(BlueprintNativeEvent)
-	void StopCountdown();
-	virtual void StopCountdown_Implementation();
-	void DeleteCountdown();
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
+    
+public:
+    virtual void Tick(float DeltaSeconds) override;
+    // â€˜Ã€â€“â€“Â Â±â‰¥Â§Â£Â¨â€œâ€˜âˆšÃŽÂºâˆ†
+    UPROPERTY(EditAnywhere)
+    int32 CountdownTime;
+    UTextRenderComponent* CountdownText;
+    int32 OriginCountdownTime;
+    void UpdateTimerDisplay();
+    void AdvanceTimer();
+    UFUNCTION(BlueprintNativeEvent)
+    void CountdownFinished();
+    virtual void CountdownFinished_Implementation();
+    FTimerHandle CountdownTimerHandle;
+    UFUNCTION(BlueprintNativeEvent)
+    void StopCountdown();
+    virtual void StopCountdown_Implementation();
+    void DeleteCountdown();
+    float ReturnTotalSecond();
 };
+

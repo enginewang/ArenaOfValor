@@ -4,90 +4,114 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Components/TimelineComponent.h"
+#include "Components/ProgressBar.h"
 #include "ArenaOfValorCharacter.generated.h"
+
+
+#define DEFAULT_RADIUS 100
+#define RED_SIDE 0
+#define BLUE_SIDE 1
+#define NEUTRAL_SIDE 2
+#define SMAP_RED_HOME_X 5000
+
+
+class UInputComponent;
+class USphereComponent;
+class UWidgetComponent;
 
 UCLASS(config=Game)
 class AArenaOfValorCharacter : public ACharacter
 {
-	GENERATED_BODY()
-
-	/*
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* FollowCamera;
-	 */
-	
+    GENERATED_BODY()
+    
+    UPROPERTY(VisibleDefaultsOnly, Category = "Custom")
+    class USkeletalMeshComponent* CharacterMesh;
+    
 public:
-	AArenaOfValorCharacter();
-
-	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	//float BaseTurnRate;
-
-	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	//float BaseLookUpRate;
-
+    AArenaOfValorCharacter();
+    
+    virtual void BeginPlay() override;
+    
 protected:
-
-	/** Resets HMD orientation in VR. */
-	void OnResetVR();
-
-	/** Called for forwards/backward input */
-	void MoveForward(float Value);
-
-	/** Called for side to side input */
-	void MoveRight(float Value);
-
-	
-	//void TurnAtRate(float Rate);
-
-	//void LookUpAtRate(float Rate);
-
-	/** Handler for when a touch input begins. */
-	void TouchStarted(ETouchIndex::Type FingerIndex, FVector Location);
-
-	/** Handler for when a touch input stops. */
-	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
-
-	UFUNCTION(BlueprintCallable, Category="Custom")
-	void BackHome();
-
+    
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Custom")
+    USphereComponent* AttackRangeComp;
+    
+    void OnResetVR();
+    
+    void MoveForward(float Value);
+    
+    void MoveRight(float Value);
+    
+    void TouchStarted(ETouchIndex::Type FingerIndex, FVector Location);
+    
+    void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
+    
+    UFUNCTION()
+    void OnAttackCompBeginOverlap(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+    
+    void OnRetriggerAttackStrike();
+    
+    UFUNCTION(BlueprintCallable, Category = "Custom")
+    void PerformAttackDamage(AActor* HitActor);
+    
 protected:
-	// APawn interface
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	// End of APawn interface
-
+    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+    
 public:
-	/** Returns CameraBoom subobject **/
-	//FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/** Returns FollowCamera subobject **/
-	//FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-
-	virtual void Tick(float DeltaTime) override;
-
-	// Ѫ��bar
-	//UPROPERTY(EditAnywhere, Category = "WidgetComponent")
-	//	class UWidgetComponent* WidgetComponent;
-
-	/*
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Costom")
-		int32 MaxHealth;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, Category = "Costom")
-		int32 CurHealth;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Costom")
-		int32 MaxMana;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, Category = "Costom")
-		int32 CurMana;
-
-	*/
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Costom")
-		FVector CurPosition;
+    virtual void Tick(float DeltaTime) override;
+    
+    // ∫Ï∑ΩŒ™0£¨¿∂∑ΩŒ™1
+  
+    
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom")
+    int MySide;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom")
+    bool isAlive;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom")
+    float AttackRadius;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom")
+    FVector CurPosition;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom")
+    float MaxHealth;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, Category = "Custom")
+    float CurHealth;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, Category = "Custom")
+    float AttackDamage;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, Category = "Custom")
+    float AttackCooldown;
+    
+    UFUNCTION(BlueprintCallable)
+    FText setHealthMessage();
+    
+    UFUNCTION(BlueprintCallable)
+    float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser);
+    
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom")
+    TArray<AActor*> ActorsInRadius;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom")
+    TSubclassOf<AActor> ActorFilter;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom")
+    TArray<AArenaOfValorCharacter*> TargetedActors;
+    
+    virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+    
+private:
+    FTimerHandle AttackTimeHandler;
+    
+    float LastAttackTime;
 };
+
 

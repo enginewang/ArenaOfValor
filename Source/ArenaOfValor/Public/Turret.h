@@ -15,11 +15,20 @@ class ARENAOFVALOR_API ATurret : public AArenaOfValorCharacter
 public:
     // Sets default values for this actor's properties
     ATurret();
-    
-protected:
-    // Called when the game starts or when spawned
     virtual void BeginPlay() override;
-    
+    virtual float TakeDamage
+        (
+                float DamageAmount,
+                struct FDamageEvent const & DamageEvent,
+                class AController * EventInstigator,
+                AActor * DamageCauser
+        ) override;
+
+protected:
+
+    UPROPERTY(EditDefaultsOnly)
+    UStaticMeshComponent* TowerMesh;
+
 public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;

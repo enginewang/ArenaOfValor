@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Projectile.generated.h"
+#include "MultiComp.generated.h"
 
 class UProjectileMovementComponent;
 class USphereComponent;
 
 UCLASS()
-class ARENAOFVALOR_API AProjectile : public AActor
+class ARENAOFVALOR_API AMultiComp : public AActor
 {
-	GENERATED_BODY()
-
+    GENERATED_BODY()
+    
     
 public:
     
@@ -26,21 +26,17 @@ public:
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Movement")
     UProjectileMovementComponent* ProjectileMovement;
     
-    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom")
-    float spanTime;
-    
-	// Sets default values for this actor's properties
-	AProjectile();
+    // Sets default values for this actor's properties
+    AMultiComp();
     
     /** called when projectile hits something */
-   /*UFUNCTION()
-    void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);*/
+    /*UFUNCTION()
+     void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);*/
     
     /** Returns CollisionComp subobject **/
     USphereComponent* GetCollisionComp() const { return CollisionComp; }
     
     /** Returns ProjectileMovement subobject **/
     UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
-
+    
 };
-

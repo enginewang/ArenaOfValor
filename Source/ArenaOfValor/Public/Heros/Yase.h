@@ -26,6 +26,17 @@ public:
     
     // Called to bind functionality to input
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-    
+
+    UFUNCTION()
+    void AbilityQ();
+
+    UFUNCTION()
+    void AbilityE();
+
+    UFUNCTION()
+    void AbilityR();
+
+    UFUNCTION()
+    void AbilityU();
 };
 

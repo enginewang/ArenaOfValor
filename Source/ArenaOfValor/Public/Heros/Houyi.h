@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Heros.h"
+#include "Projectile.cpp"
 #include "Houyi.generated.h"
 
 UCLASS()
@@ -27,4 +28,18 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+    UPROPERTY()
+    USceneComponent* SpawnFireBallPoint;
+
+    UFUNCTION()
+    void AbilityQ();
+
+    UFUNCTION()
+    void AbilityE();
+
+    UFUNCTION()
+    void AbilityR();
+
+    UFUNCTION()
+    void AbilityU();
 };

@@ -14,27 +14,24 @@ UCLASS(Blueprintable)
 class ARENAOFVALOR_API AHeros : public AArenaOfValorCharacter
 {
     GENERATED_BODY()
-    
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+    class USpringArmComponent* CameraBoom;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+    class UCameraComponent* FollowCamera;
+
+protected:
+    virtual void BeginPlay() override;
+
 public:
     // Sets default values for this character's properties
     AHeros();
-    
-    UFUNCTION(BlueprintCallable, Category = "Custom")
-    void BackHome();
-    
-protected:
-    // Called when the game starts or when spawned
-    virtual void BeginPlay() override;
-    
-public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
     
     // Called to bind functionality to input
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-    
-    
-    //  «∑ÒªÓ◊≈
    
     //  «∑Ò¬˙—™
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom")
@@ -66,6 +63,10 @@ public:
     // ∏√µ»º∂œ¬µƒ…˝º∂À˘–Ëæ≠—È
     UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, Category = "Custom")
     int LevelUpCostExp;
+    
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Transient, Category = "Custom")
+    bool canMove;
+    
     // ¥Ú”°∑® ı–≈œ¢£®¥´∏¯¿∂Ãı£©
     UFUNCTION(BlueprintCallable)
     FText setMagicMessage();
@@ -75,23 +76,43 @@ public:
     // ∑® ı÷µ «∑Òπª Õ∑≈ººƒ‹
     UFUNCTION(BlueprintCallable)
     bool MagicValid(float skillCost);
-    // ∏¸–¬…˙√¸÷µ£¨’˝ ˝¥˙±Ì‘ˆº”—™¡ø£¨∏∫ ˝Œ™ø€—™¡ø£®µ¿æﬂ÷– π”√£©
+    
+    UFUNCTION(BlueprintCallable)
+    bool BuySomething(int cost);
+    
+    // 更新血量
     UFUNCTION(BlueprintCallable)
     void UpdateHealth(float delta);
-    // ∏¸–¬∑® ı÷µ£¨’˝ ˝¥˙±Ì‘ˆº”¿∂Ãı£¨∏∫ ˝Œ™ø€¿∂Ãı£®µ¿æﬂ÷– π”√£©
+    // 更新魔法值
     UFUNCTION(BlueprintCallable)
     void UpdateMagic(float delta);
-    // …Ë÷√À¿Õˆ
+    
+    UFUNCTION(BlueprintCallable)
+    void AddHealth(float delta);
+    
+    UFUNCTION(BlueprintCallable)
+    void AddMagic(float delta);
+
     UFUNCTION(BlueprintCallable)
     void setDeath();
-    // ÷ÿ…˙
+
     UFUNCTION(BlueprintCallable)
     void reBorn();
-    // …˝º∂
+
     UFUNCTION(BlueprintCallable)
     void LevelUp();
-    // ’˝≥£ ±º‰µƒ…˙√¸÷µ°¢∑® ı÷µª∫¬˝ª÷∏¥
+    // 随着时间增加慢慢回血回蓝增加金币经验
     UFUNCTION(BlueprintCallable)
     void Refill();
+    
+    UFUNCTION(BlueprintCallable, Category = "Custom")
+    void BackHome();
+
+    UFUNCTION(BlueprintCallable, Category = "Custom")
+    void checkAndAttack(float radius, float damage);
+
+    TArray<AActor*> TargetActors;
+
+
 };
 

@@ -33,7 +33,6 @@ void ACountdown::Tick(float DeltaTime) {
     Super::Tick(DeltaTime);
 }
 
-// ∞—CountdownTimeœ‘ æµΩ”Œœ∑÷–
 void ACountdown::UpdateTimerDisplay()
 {
     CountdownText->SetText(FText::FromString(FString::FromInt(FMath::Max(CountdownTime, 0))));

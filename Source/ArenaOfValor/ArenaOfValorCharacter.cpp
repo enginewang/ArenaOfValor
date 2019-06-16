@@ -10,10 +10,11 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/SphereComponent.h"
-#include "Components/WidgetComponent.h"
+//#include "Components/WidgetComponent.h"
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
 #include "TimerManager.h"
 #include "Engine/Engine.h"
+#include "Runtime/Engine/Classes/GameFramework/Character.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AArenaOfValorCharacter
@@ -23,24 +24,19 @@ AArenaOfValorCharacter::AArenaOfValorCharacter()
     // Set size for collision capsule
     //GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
     
-   
-    
-    
+    bReplicates = true;
     
     AttackRangeComp = CreateDefaultSubobject<USphereComponent>(TEXT("AttackRangeComp"));
     
     AttackRangeComp->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
     AttackRangeComp->SetCollisionResponseToAllChannels(ECR_Ignore);
-    AttackRangeComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-
+    AttackRangeComp->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);*/
     
-    
-    
-    //FloatHealthBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("FloatHealthBar"));
-    //FloatHealthBar->SetupAttachment(RootComponent);
-    //FloatHealthBar->SetCastShadow(false);
-    //FloatHealthBar->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-    //AttackRangeComp->SetupAttachment(RootComponent);
+    FloatHealthBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("FloatHealthBar"));
+    FloatHealthBar->SetupAttachment(RootComponent);
+    FloatHealthBar->SetCastShadow(false);
+    FloatHealthBar->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+    AttackRangeComp->SetupAttachment(RootComponent);
     
     // Don't rotate when the controller rotates. Let that just affect the camera.
     bUseControllerRotationPitch = false;
@@ -52,12 +48,11 @@ AArenaOfValorCharacter::AArenaOfValorCharacter()
     GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f); // ...at this rotation rate
     GetCharacterMovement()->JumpZVelocity = 600.f;
     GetCharacterMovement()->AirControl = 0.2f;
-    // Áª»úºó¼ÇµÃ¸Ä
+    // 默认side为中立
     MySide = NEUTRAL_SIDE;
-    
+    // 默认攻击力
     AttackDamage = 10.0f;
     AttackCooldown = 2.0f;
-    
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -65,7 +60,6 @@ AArenaOfValorCharacter::AArenaOfValorCharacter()
 
 void AArenaOfValorCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
-    // Set up gameplay key bindings
     check(PlayerInputComponent);
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
     PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
@@ -109,19 +103,15 @@ void AArenaOfValorCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector
     StopJumping();
 }
 
-/*
- void AArenaOfValorCharacter::TurnAtRate(float Rate)
- {
+void AArenaOfValorCharacter::TurnAtRate(float Rate){
  // calculate delta for this frame from the rate information
- AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
- }
+    AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+}
  
- void AArenaOfValorCharacter::LookUpAtRate(float Rate)
- {
+void AArenaOfValorCharacter::LookUpAtRate(float Rate){
  // calculate delta for this frame from the rate information
- AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
- }
- */
+    AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+}
 
 void AArenaOfValorCharacter::MoveForward(float Value)
 {
@@ -130,7 +120,6 @@ void AArenaOfValorCharacter::MoveForward(float Value)
         // find out which way is forward
         const FRotator Rotation = Controller->GetControlRotation();
         const FRotator YawRotation(0, Rotation.Yaw, 0);
-        
         // get forward vector
         const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
         AddMovementInput(Direction, Value);
@@ -155,7 +144,7 @@ void AArenaOfValorCharacter::MoveRight(float Value)
 void AArenaOfValorCharacter::Tick(float DeltaTime) {
     
     Super::Tick(DeltaTime);
-    //CurPosition = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+    CurPosition = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
     
     //if (GEngine) {
     //    GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, FString::Printf(TEXT("Position: %f, %f, %f"), CurPosition.X, CurPosition.Y, CurPosition.Z));
@@ -170,11 +159,10 @@ FText AArenaOfValorCharacter::setHealthMessage()
 }
 
 
-
 void AArenaOfValorCharacter::OnAttackCompBeginOverlap(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-   //AttackTimeHandler.Invalidate();
+    AttackTimeHandler.Invalidate();
     PerformAttackDamage(OtherActor);
-   // GetWorldTimerManager().SetTimer(AttackTimeHandler, this, &AArenaOfValorCharacter::OnRetriggerAttackStrike, AttackCooldown, true);
+    GetWorldTimerManager().SetTimer(AttackTimeHandler, this, &AArenaOfValorCharacter::OnRetriggerAttackStrike, AttackCooldown, true);
     if (GEngine) {
         GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, FString::Printf(TEXT("Overlap!")));
     }
@@ -182,13 +170,12 @@ void AArenaOfValorCharacter::OnAttackCompBeginOverlap(class UPrimitiveComponent*
 
 void AArenaOfValorCharacter::OnRetriggerAttackStrike(){
     AttackRangeComp->GetOverlappingActors(ActorsInRadius);
-    // É¸Ñ¡¹¥»÷·¶Î§ÄÚµÄµÐÈË
+    // 遍历攻击范围内的actor
     for (AActor* Actor : ActorsInRadius) {
-        AArenaOfValorCharacter* thisActor = Cast<AArenaOfValorCharacter>(Actor);
+        auto thisActor = Cast<AArenaOfValorCharacter>(Actor);
         if (thisActor) {
             if (thisActor->MySide == 1 - MySide || thisActor->MySide == NEUTRAL_SIDE) {
-                //TargetedActors.Push(thisActor);
-                // Åöµ½µÚÒ»¸öÖ±½ÓÉËº¦
+                TargetedActors.Push(thisActor);
                 PerformAttackDamage(thisActor);
                 break;
             }
@@ -204,7 +191,6 @@ void AArenaOfValorCharacter::PerformAttackDamage(AActor* HitActor) {
     //if (LastAttackTime > GetWorld()->GetTimeSeconds() - AttackCooldown) {
       //  return;
     //}
-    
     if (HitActor && HitActor != this && isAlive) {
         ACharacter* OtherPawn = Cast<ACharacter>(HitActor);
         
@@ -214,7 +200,7 @@ void AArenaOfValorCharacter::PerformAttackDamage(AActor* HitActor) {
             LastAttackTime = GetWorld()->GetTimeSeconds();
             
             FPointDamageEvent DmgEvent;
-            //DmgEvent.DamageTypeClass = PunchDamageType;
+            DmgEvent.DamageTypeClass = PunchDamageType;
             DmgEvent.Damage = AttackDamage;
             
             HitActor->TakeDamage(DmgEvent.Damage, DmgEvent, GetController(), this);
@@ -243,9 +229,9 @@ float AArenaOfValorCharacter::TakeDamage(float Damage, struct FDamageEvent const
     return ActualDamage;
 }
 
+
 void AArenaOfValorCharacter::NotifyActorBeginOverlap(AActor* OtherActor){
     Super::NotifyActorBeginOverlap(OtherActor);
-    
     
     AArenaOfValorCharacter* MyCharacter = Cast<AArenaOfValorCharacter>(OtherActor);
     if(MyCharacter){
@@ -255,4 +241,14 @@ void AArenaOfValorCharacter::NotifyActorBeginOverlap(AActor* OtherActor){
         GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, FString::Printf(TEXT("Notify!")));
     }
     
+}
+
+void AArenaOfValorCharacter::OnRep_CurHealthChange(){
+    ;
+}
+
+void AArenaOfValorCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+    DOREPLIFETIME(this, CurHealth);
 }

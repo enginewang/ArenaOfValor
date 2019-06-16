@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// 亚瑟Q技能种出来的草，可以作为一个物体出现在地图上，吃了可以回血
 
 #include "HealthPack.h"
 #include "Components/StaticMeshComponent.h"

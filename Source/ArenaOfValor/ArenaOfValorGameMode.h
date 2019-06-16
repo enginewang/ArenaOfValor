@@ -1,4 +1,5 @@
 // Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
+// 没用到这个GameMode，游戏的GameMode在Blueprint中实现的
 
 #pragma once
 

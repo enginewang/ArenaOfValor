@@ -1,7 +1,12 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Daji.h"
+#include <map>
+
+const map<string, int> DajiAbilityCost = {
+        { "Q", 10 },
+        { "E", 30 },
+        { "R", 40 },
+        { "U", 60 }
+};
 
 // Sets default values
 ADaji::ADaji()
@@ -15,7 +20,7 @@ ADaji::ADaji()
 void ADaji::BeginPlay()
 {
 	Super::BeginPlay();
-	
+    this->MaxHealth=200;
 }
 
 // Called every frame
@@ -29,6 +34,9 @@ void ADaji::Tick(float DeltaTime)
 void ADaji::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+    PlayerInputComponent->BindAction("AbilityQ", IE_Pressed, this, &AYase::AbilityQ);
+    PlayerInputComponent->BindAction("AbilityQ", IE_Pressed, this, &AYase::AbilityE);
+    PlayerInputComponent->BindAction("AbilityQ", IE_Pressed, this, &AYase::AbilityR);
+    PlayerInputComponent->BindAction("AbilityQ", IE_Pressed, this, &AYase::AbilityU);
 }
 

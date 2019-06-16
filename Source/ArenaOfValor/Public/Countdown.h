@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// 倒计时
 #pragma once
 
 #include "CoreMinimal.h"

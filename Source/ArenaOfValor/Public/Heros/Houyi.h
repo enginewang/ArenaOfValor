@@ -13,15 +13,21 @@ class ARENAOFVALOR_API AHouyi : public AHeros
 {
 	GENERATED_BODY()
 
-public:
-	// Sets default values for this character's properties
+private:
+    // 单例模式，放在private下
 	AHouyi();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
+    static AHouyi& GetInstance(){
+        static AHouyi instance;
+        return instance;
+    }
+    AHouyi(const AHouyi&) = delete;
+    AHouyi& operator=(const AHouyi&) = delete;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

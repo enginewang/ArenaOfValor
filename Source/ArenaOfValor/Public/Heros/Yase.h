@@ -12,8 +12,8 @@ class ARENAOFVALOR_API AYase : public AHeros
 {
     GENERATED_BODY()
     
-public:
-    // Sets default values for this character's properties
+private:
+    // 单例模式，放在private下
     AYase();
     
 protected:
@@ -21,6 +21,12 @@ protected:
     virtual void BeginPlay() override;
     
 public:
+    static AYase& GetInstance(){
+        static AYase instance;
+        return instance;
+    }
+    AYase(const AYase&) = delete;
+    AYase& operator=(const AYase&) = delete;
     // Called every frame
     virtual void Tick(float DeltaTime) override;
     

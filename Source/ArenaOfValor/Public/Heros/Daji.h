@@ -12,16 +12,22 @@ class ARENAOFVALOR_API ADaji : public AHeros
 {
 	GENERATED_BODY()
 
-public:
-	// Sets default values for this character's properties
+private:
+    // 单例模式，放在private下
 	ADaji();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
+public:
+    static ADaji& GetInstance(){
+        static ADaji instance;
+        return instance;
+    }
+    ADaji(const ADaji&) = delete;
+    ADaji& operator=(const ADaji&) = delete;
+    // Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
